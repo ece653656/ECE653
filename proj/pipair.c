@@ -23,22 +23,37 @@
 int main(int argc, char *argv[]) {
 	int support=3;
 	int confidence=60;
+	char cmd[50]="opt -print-callgraph ";
+	char filepath[10];
+
+	
+	if(argc>=2){
+		printf("filename:%s\n",argv[1]);
+		strcat(cmd,argv[1]);
+		if(argc>=3){
+			printf("%s\n",argv[2]);
+			support = atoi(argv[2]);
+			printf("support:%d\n",support);
+			if(argc>=4){
+				printf("%s\n",argv[3]);
+				confidence = atoi(argv[3]);
+				printf("confidence:%d\n",confidence);
+			}
+		}
+	}
+
 
 	FILE *fp;
-	char path[1035];
-	/* Open the command for reading. */
-	fp = popen("opt -print-callgraph test1/hello.bc", "r");
+	char path[5000];
+	fp = popen(cmd, "r");
 	if (fp == NULL) {
 		printf("Failed to run command\n" );
 		exit(1);
 	}
-	/* Read the output a line at a time - output it. */
-	while (fgets(path, sizeof(path)-1, fp) != NULL) {
-		printf("%s", path);
-	}
-	/* close */
+	fgets(path, sizeof(path), fp);
 	pclose(fp);
-
+	printf("%s\n", path);
+	
 
 	/*
 	char s[5000];
@@ -63,26 +78,10 @@ int main(int argc, char *argv[]) {
 	*/
 
 	
-	if(argc>=2){
-		printf("%s\n",argv[1]);
-		if(argc>=3){
-			printf("%s\n",argv[2]);
-			support = atoi(argv[2]);
-			if(argc>=4){
-				printf("%s\n",argv[3]);
-				confidence = atoi(argv[3]);
-			}
-		}
-	}
-	printf("support:%s\n",support);
-	printf("confidence:%s\n",confidence);
-
 	printf("bug: A in scope2, pair: (A, B), support: 3, confidence: 75.00%%\n");
 	printf("bug: A in scope3, pair: (A, D), support: 3, confidence: 75.00%%\n");
 	printf("bug: B in scope3, pair: (B, D), support: 4, confidence: 80.00%%\n");
 	printf("bug: D in scope2, pair: (B, D), support: 4, confidence: 80.00%%\n");
 	
-
-
 	return 0;
 }
