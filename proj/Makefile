@@ -1,8 +1,7 @@
 all: build
 
-build:  pipair.c
-	gcc  -o pipair pipair.c
+build: 
+	javac pipair.java
 
-clean:
-	rm -rf *o pipair
-
+clean: 
+	rm -rf *class *o 
