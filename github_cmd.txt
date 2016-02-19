@@ -9,7 +9,7 @@ download(local project exist)
 git pull
 
 upload(first time, local project connected to github project)
-git remote add ECE653 https://github.com/ece653656/ECE653
+git remote add ECE656 https://github.com/ece653656/ECE653
 git add *.*
 git commit -m "..."(... is comment)
 git push -u ECE653 master
