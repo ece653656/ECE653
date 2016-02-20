@@ -1,7 +1,7 @@
 all: build
 
 build: 
-	javac pipair.java
+	javac pipair_java.java
 
 clean: 
 	rm -rf *class *o 
