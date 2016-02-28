@@ -12,11 +12,6 @@ import java.util.regex.Pattern;
 public class pipair_java{
 	
 	/**
-	 * key = A,B,C,...
-	 * value = [A,B,C,A,C,D...]
-	 */
-	public static Map<String,List<String>> map= new HashMap<String,List<String>>();
-	/**
 	 * key = SET(A), SET(A,B),....
 	 * value = SET(SCOPE1,SCOPE2),....
 	 */
@@ -86,30 +81,9 @@ public class pipair_java{
     
     public static void addValueToMap(String addValue,String addLocation){
     	
-    	//--------------------map-------------------------
     	// check same addvalue
     	if(nearByCallees.contains(addValue)){
     		return;
-    	}
-    	
-    	// add new key
-    	List<String> nearByValues = null;
-    	if(!map.containsKey(addValue)){
-    		nearByValues = new ArrayList<String>();
-    	}else{
-    		nearByValues = map.get(addValue);
-    	}
-    	for(String key:nearByCallees){
-    		nearByValues.add(key);
-    	}
-		nearByValues.add(addValue);
-		map.put(addValue, nearByValues);
-    	
-    	// add new value to keys
-    	for(String key:nearByCallees){
-    		nearByValues = map.get(key);
-    		nearByValues.add(addValue);
-    		map.put(key, nearByValues);
     	}
     	
     	//----------------------location-------------------------
@@ -150,71 +124,62 @@ public class pipair_java{
     
     public static void printBug(int support,double confidence){
     	
-    	Map<Set<String>,Integer> countMap = null;
-    	Set<String> countMapKeySet = null;
-    	for(String key:map.keySet()){
-    		countMap = new HashMap<Set<String>,Integer>();
-    		//get value
-    		List<String> valueList = map.get(key);
-    		//System.out.println("valueList: "+valueList);
-    		
-    		//initCountMap
-    		for(String elem: valueList){
-    			countMapKeySet = new HashSet<String>();
-    			countMapKeySet.add(key);
-    			countMapKeySet.add(elem);
-    			if(!countMap.containsKey(countMapKeySet)){
-    				countMap.put(countMapKeySet, 1);
-    			}else{
-    				countMap.put(countMapKeySet, countMap.get(countMapKeySet)+1);
-    			}
-    		}
-    		//System.out.println("countMap: "+countMap);
-
-    		//support,confidence
-			countMapKeySet = new HashSet<String>();
-    		countMapKeySet.add(key);
-    		Integer supportKey = countMap.get(countMapKeySet);
-    		Integer supportPair = null;
-    		double confidencePair = 0;
-    		for(Set<String> countMapKey: countMap.keySet()){
-    			if(!countMapKey.equals(countMapKeySet)){
-    				supportPair = countMap.get(countMapKey);
-        			confidencePair = (double)supportPair/(double)supportKey;
-
-        			//System.out.println(supportKey+";"+supportPair+";"+confidencePair);
-
-        			if(supportKey>=support && supportPair>=support && confidencePair<1 && confidencePair>=confidence){
-        				// bugpair
-        				List<String> countMapKeyList = new ArrayList<String>();
-        				for(String countMapKeyElem:countMapKey){
-        					countMapKeyList.add(countMapKeyElem);
-        				}
-        				String pairStr1 = countMapKeyList.get(0);
-        				String pairStr2 = countMapKeyList.get(1);
-        				if(pairStr1.compareTo(pairStr2)<0){
-        					pairStr1 = "("+pairStr1+", "+pairStr2+")";
-        				}else{
-        					pairStr1 = "("+pairStr2+", "+pairStr1+")";
-        				}
-        				
-        				
-        				// buglocation
-        				Set<String> locationTemp = new HashSet<String>();
-        				String locationTempStr =null;
-        				locationTemp.addAll(location.get(countMapKeySet));
-        				locationTemp.removeAll(location.get(countMapKey));
-        				for(String locationTempElem:locationTemp){
-        					locationTempStr = locationTempElem;
-        					// printbug
-            				System.out.println("bug: "+key+" in "+locationTempStr+", pair: "+pairStr1+", support: "+supportPair+", confidence: "+String.format("%.2f", confidencePair*100)+"%");
-        				}
+    	Integer supportKey = 0;
+		Integer supportPair = 0;
+		double confidencePair = 0;
+		String singleStr =null;
+		String pairStr1 =null;
+		String pairStr2 = null;
+		List<String> keyList =null;
+		
+    	for(Set<String> singleKey:location.keySet()){
+    		if(singleKey.size()==1){
+    			supportKey = location.get(singleKey).size();
+    			// bugsingle
+    			keyList = new ArrayList<String>();
+				for(String elem:singleKey){
+					keyList.add(elem);
+				}
+				singleStr = keyList.get(0);
+				
+    			for(Set<String> pipairKey:location.keySet()){
+        			if(pipairKey.size()>1 && pipairKey.contains(singleStr)){
+        				supportPair = location.get(pipairKey).size();
+        				confidencePair = (double)supportPair/(double)supportKey;
+        				//System.out.println(singleKey+","+pipairKey+","+supportKey+","+supportPair+","+confidencePair);
+        				if(supportKey>=support && supportPair>=support && confidencePair<1 && confidencePair>=confidence){
+        					
+        					// bugpair
+            				keyList = new ArrayList<String>();
+            				for(String elem:pipairKey){
+            					keyList.add(elem);
+            				}
+            				pairStr1 = keyList.get(0);
+            				pairStr2 = keyList.get(1);
+            				if(pairStr1.compareTo(pairStr2)<0){
+            					pairStr1 = "("+pairStr1+", "+pairStr2+")";
+            				}else{
+            					pairStr1 = "("+pairStr2+", "+pairStr1+")";
+            				}
+            				            				
+            				// buglocation
+            				Set<String> locationTemp = new HashSet<String>();
+            				String locationTempStr =null;
+            				locationTemp.addAll(location.get(singleKey));
+            				locationTemp.removeAll(location.get(pipairKey));
+            				for(String locationTempElem:locationTemp){
+            					locationTempStr = locationTempElem;
+            					// printbug
+                				System.out.println("bug: "+singleStr+" in "+locationTempStr+", pair: "+pairStr1+", support: "+supportPair+", confidence: "+String.format("%.2f", confidencePair*100)+"%");
+            				}
+            			}
         			}
-    			}
+        		}
     		}
-    		
-    		
     	}
+    	
+    		
+    		
     	/*
         System.out.println("bug: A in scope3, pair: (A, D), support: 3, confidence: 75.00%");
         System.out.println("bug: B in scope3, pair: (B, D), support: 4, confidence: 80.00%");
