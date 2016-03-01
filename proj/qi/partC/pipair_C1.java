@@ -1,14 +1,9 @@
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,7 +24,6 @@ public class pipair_C1{
     	
     	int support=3;
     	double confidence=0.65;
-    	//String[] cmds = {"/usr/local/bin/opt","-print-callgraph",""};
     	int argsLength = args.length;
     	if(argsLength>=1){
 			if(argsLength>=2){
@@ -137,17 +131,12 @@ public class pipair_C1{
 		String singleKeyStr =null;
 		String pairStr1 =null;
 		String pairStr2 = null;
-		List<String> keyList =null;
 		
     	for(Set<String> singleKey:location.keySet()){
     		if(singleKey.size()==1){
     			supportKey = location.get(singleKey).size();
     			// bugsingle
-    			keyList = new ArrayList<String>();
-				for(String elem:singleKey){
-					keyList.add(elem);
-				}
-				singleKeyStr = keyList.get(0);
+				singleKeyStr = singleKey.toArray()[0].toString();
 				
     			for(Set<String> pipairKey:location.keySet()){
         			if(pipairKey.size()>1 && pipairKey.contains(singleKeyStr)){
@@ -158,12 +147,8 @@ public class pipair_C1{
         				if(supportKey>=support && supportPair>=support && confidencePair<1 && confidencePair>=confidence){
         					
         					// bugpair
-            				keyList = new ArrayList<String>();
-            				for(String elem:pipairKey){
-            					keyList.add(elem);
-            				}
-            				pairStr1 = keyList.get(0);
-            				pairStr2 = keyList.get(1);
+            				pairStr1 = pipairKey.toArray()[0].toString();
+            				pairStr2 = pipairKey.toArray()[1].toString();
             				if(pairStr1.compareTo(pairStr2)<0){
             					pairStr1 = "("+pairStr1+", "+pairStr2+")";
             				}else{
@@ -201,7 +186,6 @@ public class pipair_C1{
         int i,j;
         for(String caller:callerCalleeExtend.keySet()){
         	Set<String> extendCallees = callerCalleeExtend.get(caller);
-        	List<String> extendCalleesList = new ArrayList<String>();
         	Object[] extendCalleesArray = extendCallees.toArray();
         	// find combination
         	for(i=0;i<extendCalleesArray.length;i++){

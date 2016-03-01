@@ -1,11 +1,7 @@
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.Stack;
@@ -128,17 +124,13 @@ public class pipair_C2{
 		String singleKeyStr =null;
 		String pairStr1 =null;
 		String pairStr2 = null;
-		List<String> keyList =null;
 		
     	for(Set<String> singleKey:location.keySet()){
     		if(singleKey.size()==1){
     			supportKey = location.get(singleKey).size();
     			// bugsingle
-    			keyList = new ArrayList<String>();
-				for(String elem:singleKey){
-					keyList.add(elem);
-				}
-				singleKeyStr = keyList.get(0);
+    			// bugsingle
+				singleKeyStr = singleKey.toArray()[0].toString();
 				
     			for(Set<String> pipairKey:location.keySet()){
         			if(pipairKey.size()>1 && pipairKey.contains(singleKeyStr)){
@@ -149,12 +141,8 @@ public class pipair_C2{
         				if(supportKey>=support && supportPair>=support && confidencePair<1 && confidencePair>=confidence){
         					
         					// bugpair
-            				keyList = new ArrayList<String>();
-            				for(String elem:pipairKey){
-            					keyList.add(elem);
-            				}
-            				pairStr1 = keyList.get(0);
-            				pairStr2 = keyList.get(1);
+            				pairStr1 = pipairKey.toArray()[0].toString();
+            				pairStr2 = pipairKey.toArray()[1].toString();
             				if(pairStr1.compareTo(pairStr2)<0){
             					pairStr1 = "("+pairStr1+", "+pairStr2+")";
             				}else{
@@ -211,7 +199,7 @@ public class pipair_C2{
         		}
         		for(String popElem: popSet){
         			level.put(popElem, level.get(pop)+1);
-					// 1:means expand level =1
+        			// 1:means expand level =1
         			if(!visit.contains(popElem) && level.get(popElem)<=1){
         				if(popElem.equals(findPair)){
         					return true;
