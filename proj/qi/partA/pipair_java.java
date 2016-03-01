@@ -1,8 +1,6 @@
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
@@ -22,7 +20,6 @@ public class pipair_java{
     	
     	int support=3;
     	double confidence=0.65;
-    	//String[] cmds = {"/usr/local/bin/opt","-print-callgraph",""};
     	int argsLength = args.length;
     	if(argsLength>=1){
 			if(argsLength>=2){
@@ -33,17 +30,6 @@ public class pipair_java{
 				}
 			}
 		}
-
-    	/*
-        Process pro = Runtime.getRuntime().exec(cmds);  
-        pro.waitFor();  
-        InputStream in = pro.getInputStream();  
-        BufferedReader read = new BufferedReader(new InputStreamReader(in));  
-        String line = null;  
-        while((line = read.readLine())!=null){  
-            System.out.println(line);  
-        }
-        */
     	
 		Scanner scanner=new Scanner(System.in);
 		Pattern caller_p = Pattern.compile("Call.*'(.*)'.*"); 
@@ -63,7 +49,6 @@ public class pipair_java{
 					}
 					callee_m = callee_p.matcher(line);
 					if(callee_m.matches()){
-						// solution1:
 						addValueToMap(callee_m.group(1),caller_m.group(1));
 						nearByCallees.add(callee_m.group(1));
 					}
@@ -127,35 +112,26 @@ public class pipair_java{
     	Integer supportKey = 0;
 		Integer supportPair = 0;
 		double confidencePair = 0;
-		String singleStr =null;
+		String singleKeyStr =null;
 		String pairStr1 =null;
 		String pairStr2 = null;
-		List<String> keyList =null;
 		
     	for(Set<String> singleKey:location.keySet()){
     		if(singleKey.size()==1){
     			supportKey = location.get(singleKey).size();
     			// bugsingle
-    			keyList = new ArrayList<String>();
-				for(String elem:singleKey){
-					keyList.add(elem);
-				}
-				singleStr = keyList.get(0);
+				singleKeyStr = singleKey.toArray()[0].toString();
 				
     			for(Set<String> pipairKey:location.keySet()){
-        			if(pipairKey.size()>1 && pipairKey.contains(singleStr)){
+        			if(pipairKey.size()>1 && pipairKey.contains(singleKeyStr)){
         				supportPair = location.get(pipairKey).size();
         				confidencePair = (double)supportPair/(double)supportKey;
         				//System.out.println(singleKey+","+pipairKey+","+supportKey+","+supportPair+","+confidencePair);
         				if(supportKey>=support && supportPair>=support && confidencePair<1 && confidencePair>=confidence){
         					
         					// bugpair
-            				keyList = new ArrayList<String>();
-            				for(String elem:pipairKey){
-            					keyList.add(elem);
-            				}
-            				pairStr1 = keyList.get(0);
-            				pairStr2 = keyList.get(1);
+            				pairStr1 = pipairKey.toArray()[0].toString();
+            				pairStr2 = pipairKey.toArray()[1].toString();
             				if(pairStr1.compareTo(pairStr2)<0){
             					pairStr1 = "("+pairStr1+", "+pairStr2+")";
             				}else{
@@ -170,7 +146,7 @@ public class pipair_java{
             				for(String locationTempElem:locationTemp){
             					locationTempStr = locationTempElem;
             					// printbug
-                				System.out.println("bug: "+singleStr+" in "+locationTempStr+", pair: "+pairStr1+", support: "+supportPair+", confidence: "+String.format("%.2f", confidencePair*100)+"%");
+                				System.out.println("bug: "+singleKeyStr+" in "+locationTempStr+", pair: "+pairStr1+", support: "+supportPair+", confidence: "+String.format("%.2f", confidencePair*100)+"%");
             				}
             			}
         			}
@@ -178,13 +154,6 @@ public class pipair_java{
     		}
     	}
     	
-    		
-    		
-    	/*
-        System.out.println("bug: A in scope3, pair: (A, D), support: 3, confidence: 75.00%");
-        System.out.println("bug: B in scope3, pair: (B, D), support: 4, confidence: 80.00%");
-        System.out.println("bug: D in scope2, pair: (B, D), support: 4, confidence: 80.00%");
-        */
     }
     
 }
