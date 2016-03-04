@@ -1,0 +1,32 @@
+
+initial(choose a directory)
+git init
+
+download(if no local project)
+git clone https://github.com/ece653656/ECE653
+
+download(local project exist)
+git pull
+
+upload(first time, local project connected to github project)
+git remote add ECE656 https://github.com/ece653656/ECE653
+git add *.*
+git commit -m "..."(... is comment)
+git push -u ECE653 master
+
+upload(not first time)
+git add *.*
+git commit -m "..."(... is comment)
+git push 
+
+delete(must delete by git command not system)
+git rm *.*
+git commit -m "..."(... is comment)
+git push 
+
+
+clean the file have added or commited but not pushed
+git reset *.*
+
+reset the file to the latest version in github
+git checkout *.*
