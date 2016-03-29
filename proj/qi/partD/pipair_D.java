@@ -168,11 +168,11 @@ public class pipair_java{
         				// buglocation
         				Set<String> locationTemp = new HashSet<String>();
         				String locationTempStr =null;
-        				locationTemp.addAll(pipairValue);
+        				locationTemp.addAll(pipairValue2);
         				for(String locationTempElem:locationTemp){
         					locationTempStr = locationTempElem;
         					// printbug
-            				System.out.println("bug: "+pairStr+" in "+locationTempStr+", pair: "+pairStr2+", support: "+supportPair+", confidence: "+String.format("%.2f", confidencePairAll	*100)+"%");
+            				System.out.println("bug: "+pairStr2+" in "+locationTempStr+", pair: "+pairStr+", support: "+supportPair+", confidence: "+String.format("%.2f", confidencePairAll	*100)+"%");
         				}
     				}
 				}
