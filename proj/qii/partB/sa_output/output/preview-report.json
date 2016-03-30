@@ -1,0 +1,43 @@
+{
+  "header" : {
+    "format" : "commit preview report",
+    "version" : 2
+  },
+  "analysisInfo" : {
+    "ownerAssignmentRule" : "default_component_owner",
+    "comparisonSnapshotId" : null,
+    "reportTimestamp" : "2016-03-17T13:19:26.878Z",
+    "user" : "admin",
+    "command" : "/usr/local/cov-analysis-linux64-8.0.0/bin/cov-analyze --java --from-cov-analyze-java --dir /home/c392liu/sa_output/intermediate_r1/"
+  },
+  "issueInfo" : [ {
+    "cid" : 10090,
+    "mergeKey" : "8b72a35dc5592b47027c9e9525016b6b",
+    "presentInComparisonSnapshot" : false,
+    "firstDetectedDateTime" : "2016-03-17T13:19:26.878Z",
+    "occurrences" : [ {
+      "checker" : "FB.DM_DEFAULT_ENCODING",
+      "file" : "/home/c392liu/sa_output/pipair_java.java",
+      "function" : "pipair_java.main(java.lang.String[])",
+      "extra" : "",
+      "mergeWithLowercaseFile" : false,
+      "subcategory" : "none",
+      "mainEventLineNumber" : 34,
+      "mainEventDescription" : "Found reliance on default encoding: new java.util.Scanner(InputStream).",
+      "componentName" : "Other",
+      "componentDefaultOwner" : null,
+      "componentDefaultOwnerLdapServer" : null
+    } ],
+    "triage" : {
+      "severity" : "Unspecified",
+      "owner" : null,
+      "externalReference" : null,
+      "legacy" : "False",
+      "fixTarget" : "Untargeted",
+      "action" : "Undecided",
+      "classification" : "Unclassified"
+    },
+    "customTriage" : { },
+    "ownerLdapServerName" : null
+  } ]
+}

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<BugCollection version="3.0.0-dev-20140429-1103397" sequence="0" timestamp="1458171580000" analysisTimestamp="1458171582710" release="">
+  <Project projectName="coverityEmit">
+    <Jar>/home/c392liu/sa_output/intermediate_r1/output/java-private/coverity_ac.jar</Jar>
+    <AuxClasspathEntry>/home/c392liu/sa_output/intermediate_r1/output/java-private/coverity_cp_n_jars.jar</AuxClasspathEntry>
+  </Project>
+  <BugInstance type="DM_DEFAULT_ENCODING" priority="1" abbrev="Dm" category="I18N" instanceHash="498e54058de1bbd185ec9e8f24cd8332" instanceOccurrenceNum="0" instanceOccurrenceMax="0" rank="19">
+    <ShortMessage></ShortMessage>
+    <LongMessage>-[CovLStr-[v1]--[Found reliance on default encoding: -[0]-.]--[new java.util.Scanner(InputStream)]-]-</LongMessage>
+    <Class classname="pipair_java" primary="true">
+      <SourceLine classname="pipair_java" start="10" end="157" sourcefile="pipair_java.java" sourcepath="pipair_java.java">
+        <Message>-[CovLStr-[v1]--[Here]-]-</Message>
+      </SourceLine>
+      <Message>-[CovLStr-[v1]--[In class -[0]-]--[pipair_java]-]-</Message>
+    </Class>
+    <Method classname="pipair_java" name="main" signature="([Ljava/lang/String;)V" isStatic="true" primary="true">
+      <SourceLine classname="pipair_java" start="21" end="63" startBytecode="0" endBytecode="509" sourcefile="pipair_java.java" sourcepath="pipair_java.java"/>
+      <Message>-[CovLStr-[v1]--[In method -[0]-]--[pipair_java.main(String[])]-]-</Message>
+    </Method>
+    <Method classname="java.util.Scanner" name="&lt;init&gt;" signature="(Ljava/io/InputStream;)V" isStatic="false" role="METHOD_CALLED">
+      <SourceLine classname="java.util.Scanner" start="608" end="609" startBytecode="0" endBytecode="71" sourcefile="Scanner.java" sourcepath="java/util/Scanner.java"/>
+      <Message>-[CovLStr-[v1]--[Called method -[0]-]--[new java.util.Scanner(InputStream)]-]-</Message>
+    </Method>
+    <SourceLine classname="pipair_java" primary="true" start="34" end="34" startBytecode="55" endBytecode="55" sourcefile="pipair_java.java" sourcepath="pipair_java.java">
+      <Message>-[CovLStr-[v1]--[Here]-]-</Message>
+    </SourceLine>
+  </BugInstance>
+  <BugCategory category="I18N">
+    <Description>Internationalization</Description>
+  </BugCategory>
+  <BugPattern type="DM_DEFAULT_ENCODING" abbrev="Dm" category="I18N">
+    <ShortDescription></ShortDescription>
+    <Details><![CDATA[]]></Details>
+  </BugPattern>
+  <BugCode abbrev="Dm">
+    <Description>Dubious method used</Description>
+  </BugCode>
+  <Errors errors="0" missingClasses="0"></Errors>
+  <FindBugsSummary timestamp="Wed, 16 Mar 2016 19:39:40 -0400" total_classes="1" referenced_classes="25" total_bugs="1" total_size="95" num_packages="1" java_version="1.8.0_45" vm_version="25.45-b02" cpu_seconds="6.92" clock_seconds="1.53" peak_mbytes="304.19" alloc_mbytes="981.50" gc_seconds="0.02" priority_1="1">
+    <FileStats path="pipair_java.java" bugCount="1" size="95" bugHash="0c91ae5b5440ccdf8dd84939ba30d7cb"/>
+    <PackageStats package="" total_bugs="1" total_types="1" total_size="95" priority_1="1">
+      <ClassStats class="pipair_java" sourceFile="pipair_java.java" interface="false" size="95" bugs="1" priority_1="1"/>
+    </PackageStats>
+    <FindBugsProfile>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassInfoAnalysisEngine" totalMilliseconds="240" invocations="437" avgMicrosecondsPerInvocation="550" maxMicrosecondsPerInvocation="17294" standardDeviationMircosecondsPerInvocation="1532"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FieldItemSummary" totalMilliseconds="87" invocations="25" avgMicrosecondsPerInvocation="3508" maxMicrosecondsPerInvocation="22740" standardDeviationMircosecondsPerInvocation="5909"/>
+      <ClassProfile name="edu.umd.cs.findbugs.OpcodeStack$JumpInfoFactory" totalMilliseconds="79" invocations="125" avgMicrosecondsPerInvocation="636" maxMicrosecondsPerInvocation="4788" standardDeviationMircosecondsPerInvocation="747"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.ValueNumberDataflowFactory" totalMilliseconds="62" invocations="6" avgMicrosecondsPerInvocation="10433" maxMicrosecondsPerInvocation="18067" standardDeviationMircosecondsPerInvocation="6190"/>
+      <ClassProfile name="edu.umd.cs.findbugs.util.TopologicalSort" totalMilliseconds="55" invocations="403" avgMicrosecondsPerInvocation="137" maxMicrosecondsPerInvocation="3534" standardDeviationMircosecondsPerInvocation="358"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.TypeDataflowFactory" totalMilliseconds="50" invocations="5" avgMicrosecondsPerInvocation="10176" maxMicrosecondsPerInvocation="19326" standardDeviationMircosecondsPerInvocation="6099"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.IsNullValueDataflowFactory" totalMilliseconds="46" invocations="5" avgMicrosecondsPerInvocation="9341" maxMicrosecondsPerInvocation="18385" standardDeviationMircosecondsPerInvocation="8097"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.UnconditionalValueDerefDataflowFactory" totalMilliseconds="42" invocations="5" avgMicrosecondsPerInvocation="8526" maxMicrosecondsPerInvocation="19571" standardDeviationMircosecondsPerInvocation="7504"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.MethodGenFactory" totalMilliseconds="35" invocations="5" avgMicrosecondsPerInvocation="7169" maxMicrosecondsPerInvocation="29821" standardDeviationMircosecondsPerInvocation="11360"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.JavaClassAnalysisEngine" totalMilliseconds="35" invocations="32" avgMicrosecondsPerInvocation="1113" maxMicrosecondsPerInvocation="15283" standardDeviationMircosecondsPerInvocation="2695"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.NoteDirectlyRelevantTypeQualifiers" totalMilliseconds="33" invocations="25" avgMicrosecondsPerInvocation="1333" maxMicrosecondsPerInvocation="9475" standardDeviationMircosecondsPerInvocation="2245"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.CFGFactory" totalMilliseconds="25" invocations="5" avgMicrosecondsPerInvocation="5096" maxMicrosecondsPerInvocation="9197" standardDeviationMircosecondsPerInvocation="3274"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FindRefComparison$SpecialTypeAnalysis" totalMilliseconds="24" invocations="5" avgMicrosecondsPerInvocation="4817" maxMicrosecondsPerInvocation="13896" standardDeviationMircosecondsPerInvocation="5036"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.OverridingEqualsNotSymmetrical" totalMilliseconds="22" invocations="25" avgMicrosecondsPerInvocation="910" maxMicrosecondsPerInvocation="10433" standardDeviationMircosecondsPerInvocation="2134"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FunctionsThatMightBeMistakenForProcedures" totalMilliseconds="22" invocations="25" avgMicrosecondsPerInvocation="896" maxMicrosecondsPerInvocation="5442" standardDeviationMircosecondsPerInvocation="1424"/>
+      <ClassProfile name="edu.umd.cs.findbugs.ba.npe.NullDerefAndRedundantComparisonFinder" totalMilliseconds="20" invocations="5" avgMicrosecondsPerInvocation="4198" maxMicrosecondsPerInvocation="11251" standardDeviationMircosecondsPerInvocation="4146"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.BuildObligationPolicyDatabase" totalMilliseconds="20" invocations="25" avgMicrosecondsPerInvocation="812" maxMicrosecondsPerInvocation="5326" standardDeviationMircosecondsPerInvocation="1368"/>
+    </FindBugsProfile>
+  </FindBugsSummary>
+  <ClassFeatures></ClassFeatures>
+  <History></History>
+</BugCollection>

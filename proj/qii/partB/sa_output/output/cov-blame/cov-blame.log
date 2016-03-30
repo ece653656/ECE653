@@ -1,0 +1,4 @@
+[LOG] run: /usr/local/cov-analysis-linux64-8.0.0/bin/cov-format-errors --dir /home/c392liu/sa_output/intermediate_r1 --json-output-v4 /home/c392liu/sa_output/intermediate_r1/output/cov-blame/errors.json --outputdir /home/c392liu/sa_output/intermediate_r1/output
+[LOG] /usr/local/cov-analysis-linux64-8.0.0/bin/cov-format-errors exits successfully.
+[INFO] Computing likely owner for 10090 [8b72a35dc5592b47027c9e9525016b6b]:
+[INFO] 	default_component_owner: none

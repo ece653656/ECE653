@@ -1,0 +1,14 @@
+/usr/local/cov-analysis-linux64-8.0.0/bin/cov-analyze --java --from-cov-analyze-java --dir /home/c392liu/sa_output/intermediate_r1/ 
+
+FindBugs time: 00:00:03
+Analysis summary report:
+------------------------
+Files analyzed                 : 1
+Total LoC input to cov-analyze : 117
+Functions analyzed             : 5
+Paths analyzed                 : 1342
+Time taken by analysis         : 00:00:31
+Defect occurrences found       : 0
+FindBugs Checkers: 1 errors
+ FB.DM_DEFAULT_ENCODING           1
+Additional defects, FindBugs   : 1

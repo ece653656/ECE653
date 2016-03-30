@@ -1,0 +1,108 @@
+{
+  "cov-analyze" : {
+    "command-line-options" : {
+      args : [
+        "java",
+        "from-cov-analyze-java",
+        "dir",
+        "config"
+      ]
+    },
+    time : 31,
+    "line-counts" : {
+      "C/C++" : {
+        "blank-lines" : 0,
+        "code-lines" : 0,
+        "comment-lines" : 0
+      },
+      Java : {
+        "blank-lines" : 29,
+        "code-lines" : 117,
+        "comment-lines" : 14
+      },
+      "C#" : {
+        "blank-lines" : 0,
+        "code-lines" : 0,
+        "comment-lines" : 0
+      },
+      JavaScript : {
+        "blank-lines" : 0,
+        "code-lines" : 0,
+        "comment-lines" : 0
+      },
+      "Objective-C/C++" : {
+        "blank-lines" : 0,
+        "code-lines" : 0,
+        "comment-lines" : 0
+      },
+      PHP : {
+        "blank-lines" : 0,
+        "code-lines" : 0,
+        "comment-lines" : 0
+      },
+      Python : {
+        "blank-lines" : 0,
+        "code-lines" : 0,
+        "comment-lines" : 0
+      }
+    },
+    "file-statistics-by-extension" : {
+      class : {
+        files : 1,
+        "total-bytes" : 5283
+      },
+      jar : {
+        files : 12,
+        "total-bytes" : 37875774
+      },
+      java : {
+        files : 1,
+        "total-bytes" : 5108
+      }
+    },
+    ident : "8.0.0 (build 2c247ff7c4 p-jasper-push-24789.298)",
+    platform : "Linux 2.6.18-407.el5 x86_64",
+    "short-platform" : "linux64",
+    extver : "8.0.0",
+    intver : "2c247ff7c4 p-jasper-push-24789.298",
+    "aw-peak-mem-bytes" : 52363264,
+    "am+aw-peak-mem-bytes" : 140759040,
+    "bytecode-functions" : 0,
+    concurrency : true,
+    cxx : true,
+    "enable-parse-warnings" : false,
+    failures : 0,
+    "files-analyzed" : 1,
+    force : false,
+    "function-metrics-count" : 5,
+    "functions-analyzed" : 5,
+    "incremental-hits" : 0,
+    "incremental-misses" : 20,
+    "dyncg-sites-resolved" : 0,
+    "dyncg-sites-total" : 0,
+    "max-mem" : 512,
+    "memout-count" : 0,
+    "pathout-count" : 0,
+    paths : 5000,
+    "paths-analyzed" : 1342,
+    "peak-mem-bytes" : 272662528,
+    security : false,
+    "tus-count" : 12,
+    "web-app-archives" : 0,
+    "string-graph-nodes" : 0,
+    "web-app-entry-points" : 0,
+    "web-app-views-unused" : 0,
+    "ta.code_age_thresholds" : "0, 0",
+    "enabled-checkers" : "BAD_CHECK_OF_WAIT_COND BAD_LOCK_OBJECT CALL_SUPER CONSTANT_EXPRESSION_RESULT COPY_PASTE_ERROR DEADCODE FB.* FORWARD_NULL GUARDED_BY_VIOLATION IDENTICAL_BRANCHES INVALIDATE_ITERATOR LOCK_EVASION LOCK_INVERSION MISSING_BREAK NESTING_INDENT_MISMATCH NON_STATIC_GUARDING_STATIC NULL_RETURNS OVERFLOW_BEFORE_WIDEN RESOURCE_LEAK REVERSE_INULL STRAY_SEMICOLON SWAPPED_ARGUMENTS UNINTENDED_INTEGER_DIVISION UNREACHABLE VOLATILE_ATOMICITY",
+    "FB.DM_DEFAULT_ENCODING-new-defect-count" : 1,
+    "total-new-defect-count" : 1
+  },
+  "cov-build" : {
+    "build-successes" : 1,
+    "build-failures" : 0,
+    "build-up-to-date" : 0,
+    "cs-webapps-detected" : 0,
+    "cs-webapp-successes" : 0,
+    "cs-webapp-compilation-secs" : 0
+  }
+}
