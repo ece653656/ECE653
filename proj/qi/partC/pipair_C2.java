@@ -182,7 +182,7 @@ public class pipair_java{
     public static boolean reachReducedBug(Set<String> singleKey,Set<String> pipairKey, Set<String> nearBy){
     	Set<String> pipair = new HashSet<String>();
     	pipair.addAll(pipairKey);
-    	pipair.remove(singleKey);
+    	pipair.removeAll(singleKey);
     	String findPair = pipair.toArray()[0].toString();
     	for(String nearElem:nearBy){
     		if(singleKey.contains(nearElem)){
