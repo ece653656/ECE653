@@ -21,6 +21,7 @@ public class pipair_java{
 	public static Map<String,Set<String>> callerCallee= new HashMap<String,Set<String>>();
 	//partc
 	public static Map<String,Set<String>> callerCalleeExtend= new HashMap<String,Set<String>>();
+	public static int expandLevel=1;
 	
     public static void main(String[] args) throws Exception{  
     	
@@ -33,6 +34,9 @@ public class pipair_java{
 				if(argsLength>=3){
 				    confidence = Double.parseDouble(args[2]);
 				    confidence = confidence/100;
+				    if(argsLength>=4){
+				    	expandLevel = Integer.parseInt(args[3]);
+					}
 				}
 			}
 		}
@@ -223,8 +227,8 @@ public class pipair_java{
     	
     	//System.out.println("levelCount:"+levelCount);
 		//System.out.println("result:"+result);
-    	// 1:means expand level =1
-    	if(levelCount>3){
+    	// expandLevel means expand level, default =1
+    	if(levelCount>expandLevel){
     		return result;
     	}else{
     		Set<String> callees = callerCallee.get(caller);

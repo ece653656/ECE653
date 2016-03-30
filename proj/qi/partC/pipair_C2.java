@@ -8,7 +8,7 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class pipair_C2{
+public class pipair_java{
 	
 	/**
 	 * key = SET(A), SET(A,B),....
@@ -18,6 +18,8 @@ public class pipair_C2{
 	public static Set<String> nearByCallees= new HashSet<String>();
 	//partc
 	public static Map<String,Set<String>> callerCallee= new HashMap<String,Set<String>>();
+	
+	public static int expandLevel=1;
 	
     public static void main(String[] args) throws Exception{  
     	
@@ -31,6 +33,9 @@ public class pipair_C2{
 				if(argsLength>=3){
 				    confidence = Double.parseDouble(args[2]);
 				    confidence = confidence/100;
+				    if(argsLength>=4){
+				    	expandLevel = Integer.parseInt(args[3]);
+					}
 				}
 			}
 		}
@@ -199,8 +204,8 @@ public class pipair_C2{
         		}
         		for(String popElem: popSet){
         			level.put(popElem, level.get(pop)+1);
-        			// 1:means expand level =1
-        			if(!visit.contains(popElem) && level.get(popElem)<=1){
+        			// expandLevel means expand level, default =1
+        			if(!visit.contains(popElem) && level.get(popElem)<=expandLevel){
         				if(popElem.equals(findPair)){
         					return true;
         				}
