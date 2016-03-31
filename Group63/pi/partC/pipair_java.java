@@ -16,7 +16,6 @@ public class pipair_java{
 	 * value = SET(SCOPE1,SCOPE2),....
 	 */
 	public static Map<Set<String>,Set<String>> location= new HashMap<Set<String>,Set<String>>();
-	public static Set<String> nearByCallees= new HashSet<String>();
 	//partc
 	public static Map<String,Set<String>> callerCallee= new HashMap<String,Set<String>>();
 	//partc
@@ -51,7 +50,6 @@ public class pipair_java{
 			line = scanner.nextLine();
 			caller_m = caller_p.matcher(line);
 			if(caller_m.matches() /*&& !"main".equals(caller_m.group(1))*/) {
-				nearByCallees.clear();
 				Set<String> callees = new HashSet<String>();
 				while(scanner.hasNext()){
 					line = scanner.nextLine();
@@ -61,8 +59,6 @@ public class pipair_java{
 					callee_m = callee_p.matcher(line);
 					if(callee_m.matches()){
 						// solution1:
-						addValueToMap(callee_m.group(1),caller_m.group(1));
-						nearByCallees.add(callee_m.group(1));
 						callees.add(callee_m.group(1));
 					}
 				}
@@ -83,51 +79,6 @@ public class pipair_java{
 //		System.out.println(location);
 		printBug(support,confidence);
     }
-    
-    
-    
-    public static void addValueToMap(String addValue,String addLocation){
-    	
-    	//----------------------location-------------------------
-    	// check same addvalue
-    	if(nearByCallees.contains(addValue)){
-    		return;
-    	}
-    	
-    	Set<String> locationMapKeySet = null;
-    	Set<String> locationMapValueSet = null;
-    	for(String key:nearByCallees){
-    		// add otherpair
-    		locationMapKeySet = new HashSet<String>();
-    		locationMapKeySet.add(addValue);
-    		locationMapKeySet.add(key);
-    		if(!location.containsKey(locationMapKeySet)){
-    			locationMapValueSet = new HashSet<String>();
-    		}else{
-    			locationMapValueSet = location.get(locationMapKeySet);
-    		}
-    		locationMapValueSet.add(addLocation);
-    		location.put(locationMapKeySet, locationMapValueSet);
-    		
-    	}
-    	
-    	// add selfpair
-		locationMapKeySet = new HashSet<String>();
-		locationMapKeySet.add(addValue);
-		if(!location.containsKey(locationMapKeySet)){
-			locationMapValueSet = new HashSet<String>();
-		}else{
-			locationMapValueSet = location.get(locationMapKeySet);
-		}
-		locationMapValueSet.add(addLocation);
-		location.put(locationMapKeySet, locationMapValueSet);
-		
-    	return;
-    }
-    
-    
-    
-    
     
     public static void printBug(int support,double confidence){
     	
