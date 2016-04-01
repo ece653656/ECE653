@@ -7,7 +7,9 @@ The Map<List,Set> can help distinguish [A,B] from [B,A], and store pipair with s
 
 
 The running mothod is the same with part1(A)
-As there are no pipair to connect callgraph with java program, you can run command like this in test3 folder on eceLinux:
+As there are no pipair to connect callgraph with java program, you can run command like this in test folder on eceLinux:
+1 make
+2 cd test3
 1 bash
 2 opt -print-callgraph test3.bc 2>&1 >/dev/null  | java -cp ../ -Xms128m -Xmx128m pipair_java $@ 2>/dev/null
 
