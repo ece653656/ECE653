@@ -9,14 +9,18 @@ import java.util.regex.Pattern;
 public class pipair_java{
 	
 	/**
-	 * key = SET(A), SET(A,B),....
-	 * value = SET(SCOPE1,SCOPE2),....
+	 * key is the set of pipair callee and single callee, example: SET(A), SET(A,B),....
+	 * value is the set of caller for callee, example: SET(SCOPE1,SCOPE2),....
 	 */
 	public static Map<Set<String>,Set<String>> location= new HashMap<Set<String>,Set<String>>();
+	/**
+	 * the set to help initialize HashMap 'location'
+	 */
 	public static Set<String> nearByCallees= new HashSet<String>();
 	
     public static void main(String[] args) throws Exception{  
     	
+		// accept argument to set threshold support and confidence
     	int support=3;
     	double confidence=0.65;
     	int argsLength = args.length;
@@ -36,6 +40,7 @@ public class pipair_java{
 		Matcher caller_m = null;
 		Matcher callee_m = null;
 		String line =null;
+		// 
 		while(scanner.hasNext()){
 			line = scanner.nextLine();
 			caller_m = caller_p.matcher(line);
@@ -56,13 +61,14 @@ public class pipair_java{
 			}
 		}
 		scanner.close();
-		//System.out.println(map);
-		//System.out.println(location);
+		// Traverse HashMap ¡®location¡¯ and print bug
 		printBug(support,confidence);
     }
     
     
-    
+    /**
+	 * the function to help initialize HashMap 'location'
+	 */
     public static void addValueToMap(String addValue,String addLocation){
     	
     	// check same addvalue
@@ -74,7 +80,7 @@ public class pipair_java{
     	Set<String> locationMapKeySet = null;
     	Set<String> locationMapValueSet = null;
     	for(String key:nearByCallees){
-    		// add otherpair
+    		// update pair function and its callers
     		locationMapKeySet = new HashSet<String>();
     		locationMapKeySet.add(addValue);
     		locationMapKeySet.add(key);
@@ -88,7 +94,7 @@ public class pipair_java{
     		
     	}
     	
-    	// add selfpair
+    	// update single function and its callers
 		locationMapKeySet = new HashSet<String>();
 		locationMapKeySet.add(addValue);
 		if(!location.containsKey(locationMapKeySet)){
@@ -104,8 +110,10 @@ public class pipair_java{
     
     
     
-    
-    
+    /**
+	 * Traverse HashMap ¡®location¡¯ to calculate support and confidence for each pipair
+	 * and determine if a callee function is a bug in a caller function.
+	 */
     public static void printBug(int support,double confidence){
     	
     	Integer supportKey = 0;
@@ -117,18 +125,22 @@ public class pipair_java{
 		
     	for(Set<String> singleKey:location.keySet()){
     		if(singleKey.size()==1){
+				// support of single function
     			supportKey = location.get(singleKey).size();
-    			// bugsingle
+				// singleKeyStr is for bug line printout 
 				singleKeyStr = singleKey.toArray()[0].toString();
 				
     			for(Set<String> pipairKey:location.keySet()){
         			if(pipairKey.size()>1 && pipairKey.contains(singleKeyStr)){
+						// support of pipair function
         				supportPair = location.get(pipairKey).size();
+						// confidence of pipair function
         				confidencePair = (double)supportPair/(double)supportKey;
-        				//System.out.println(singleKey+","+pipairKey+","+supportKey+","+supportPair+","+confidencePair);
+
+						// check pipair to meet threshold support and confidence
         				if(supportKey>=support && supportPair>=support && confidencePair<1 && confidencePair>=confidence){
         					
-        					// bugpair
+        					// pairStr1 is for bug line printout
             				pairStr1 = pipairKey.toArray()[0].toString();
             				pairStr2 = pipairKey.toArray()[1].toString();
             				if(pairStr1.compareTo(pairStr2)<0){
@@ -137,7 +149,7 @@ public class pipair_java{
             					pairStr1 = "("+pairStr2+", "+pairStr1+")";
             				}
             				            				
-            				// buglocation
+            				// location for pipair should take place of single function 
             				Set<String> locationTemp = new HashSet<String>();
             				String locationTempStr =null;
             				locationTemp.addAll(location.get(singleKey));

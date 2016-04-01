@@ -1,32 +1,18 @@
-ECE453/SE465/CS447/ECE653/CS647
-Project Skeleton Files
+ECE653
+Assignment 3 Part1(D) description
 
-Lab Instructor:
-Bernie Roehl 
-
-TA in Charge for Part I):
-Edmund Wong
-
-https://ece.uwaterloo.ca/~lintan/courses/testing/llvm.html
-
-Do NOT modify any files given in this archive. You may modify files according to your local configurations, but note that all changes will be overwritten before your project is being marked.
-
-We will grade your project submissios on ecelinux. Make sure your code works on ecelinux machines! It is recommended to develop on ecelinux or your own computer running a popular flavour of Linux. There were reports show that ``sort'', as an example, behaves differently in Mac than in Linux. Cygwin and MinGW were not tested.
-
-If clang is not in PATH, how to tell Makefile where it is installed?
-In Makefile.common, "PREFIX=" defines where the LLVM executables are located. Put the FULL path if the executables are not in PATH.
-
-How to run tests?
-First, modify PREFIX accordingly.
-To run all tests together, execute "verify.sh". Logs of all output can be found in /tmp with names "testing-<your usename>-pi-<time of log>.log".
-clean.sh runs "make clean" in all tests directories, which removes temporary files created by verify.sh.
-To generate the output for one test, run "make" in the test's directory. Your output should be identical to the "gold" file. Your output should be passed through "sort" before "diff"ing with the "gold" file, i.e. cat <your output> | sort | diff - gold_x_xx
-
-How to prepare a submission?
-Organize the "pi" directory in the way that we run make inside "pi" directory and "pipair" is generated in the same directory.  The exit code of make will not be checked.
-
-How the marking is done?
-We will untar your submission, copy the content of the pi directory, run make, copy over the skeleton files and the full test suite with six tests and then run verify.sh.
-Note that each test is given 2 minutes. My prototype runs test3 in 2 seconds and test6 (not given to you) in 25 seconds, and all other tests in tens or hundreds of milliseconds. 
+The main idea of this approach is to consider the order for pipair, while discovering bug by the method of part1(A)
+The only difference with Part1(A) is that HashMap ¡®location¡¯ changed from Map<Set,Set> into Map<List,Set>
+The Map<List,Set> can help distinguish [A,B] from [B,A], and store pipair with same element such as [A,A]
 
 
+The running mothod is the same with part1(A)
+As there are no pipair to connect callgraph with java program, you can run command like this in test3 folder on eceLinux:
+1 bash
+2 opt -print-callgraph test3.bc 2>&1 >/dev/null  | java -cp ../ -Xms128m -Xmx128m pipair_java $@ 2>/dev/null
+
+
+
+The bug output include:
+1 the original bug in Part1(A),but have been reduce, because some false positive gereneated by MAY belief in Part1(A)
+2 new bug such as 'single function should appear more than once' or 'functions should be called in proper order'

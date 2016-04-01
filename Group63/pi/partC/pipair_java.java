@@ -1,29 +1,37 @@
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class pipair_java{
 	
 	/**
-	 * key = SET(A), SET(A,B),....
-	 * value = SET(SCOPE1,SCOPE2),....
+	 * key is the set of pipair callee and single callee, 	example: SET(A), SET(A,B),....
+	 * value is the set of callers for the callee, 			example: SET(SCOPE1,SCOPE2),....
 	 */
 	public static Map<Set<String>,Set<String>> location= new HashMap<Set<String>,Set<String>>();
-	//partc
+	/**
+	 * the set to help initialize HashMap 'location'
+	 */
+	public static Set<String> nearByCallees= new HashSet<String>();
+	/**
+	 * key is the caller,									example: scope1,....
+	 * value is the set of callees for the caller.			example: SET(A,B,C,D)....
+	 */
 	public static Map<String,Set<String>> callerCallee= new HashMap<String,Set<String>>();
-	//partc
-	public static Map<String,Set<String>> callerCalleeExtend= new HashMap<String,Set<String>>();
+	/**
+	 * control expansion level
+	 */
 	public static int expandLevel=1;
 	
     public static void main(String[] args) throws Exception{  
     	
+		// accept argument to set threshold support and confidence
     	int support=3;
     	double confidence=0.65;
     	int argsLength = args.length;
@@ -40,7 +48,7 @@ public class pipair_java{
 			}
 		}
 
-		Scanner scanner=new Scanner(System.in);
+    	Scanner scanner=new Scanner(System.in);
 		Pattern caller_p = Pattern.compile("Call.*'(.*)'.*"); 
 		Pattern callee_p = Pattern.compile(".*'(.*)'.*");
 		Matcher caller_m = null;
@@ -50,6 +58,7 @@ public class pipair_java{
 			line = scanner.nextLine();
 			caller_m = caller_p.matcher(line);
 			if(caller_m.matches() /*&& !"main".equals(caller_m.group(1))*/) {
+				nearByCallees.clear();
 				Set<String> callees = new HashSet<String>();
 				while(scanner.hasNext()){
 					line = scanner.nextLine();
@@ -58,28 +67,72 @@ public class pipair_java{
 					}
 					callee_m = callee_p.matcher(line);
 					if(callee_m.matches()){
-						// solution1:
+						addValueToMap(callee_m.group(1),caller_m.group(1));
+						nearByCallees.add(callee_m.group(1));
 						callees.add(callee_m.group(1));
 					}
 				}
-				// partc
 				if(!callees.isEmpty()){
 					callerCallee.put(caller_m.group(1), callees);
 				}
 			}
 		}
 		scanner.close();
-		//partc:solution1:
-		initInterLocation();
-//		System.out.println("callerCallee");
-//		System.out.println(callerCallee);
-//		System.out.println("callerCalleeExtend");
-//		System.out.println(callerCalleeExtend);
-//		System.out.println("location");
-//		System.out.println(location);
+
+		// Traverse HashMap ¡®location¡¯ and print bug
 		printBug(support,confidence);
     }
     
+    
+
+    /**
+	 * the function to help initialize HashMap 'location'
+	 */
+    public static void addValueToMap(String addValue,String addLocation){
+    	
+    	// check same addvalue
+    	if(nearByCallees.contains(addValue)){
+    		return;
+    	}
+    	
+		//----------------------location-------------------------
+    	Set<String> locationMapKeySet = null;
+    	Set<String> locationMapValueSet = null;
+    	for(String key:nearByCallees){
+    		// update pair function and its callers
+    		locationMapKeySet = new HashSet<String>();
+    		locationMapKeySet.add(addValue);
+    		locationMapKeySet.add(key);
+    		if(!location.containsKey(locationMapKeySet)){
+    			locationMapValueSet = new HashSet<String>();
+    		}else{
+    			locationMapValueSet = location.get(locationMapKeySet);
+    		}
+    		locationMapValueSet.add(addLocation);
+    		location.put(locationMapKeySet, locationMapValueSet);
+    		
+    	}
+    	
+    	// update single function and its callers
+		locationMapKeySet = new HashSet<String>();
+		locationMapKeySet.add(addValue);
+		if(!location.containsKey(locationMapKeySet)){
+			locationMapValueSet = new HashSet<String>();
+		}else{
+			locationMapValueSet = location.get(locationMapKeySet);
+		}
+		locationMapValueSet.add(addLocation);
+		location.put(locationMapKeySet, locationMapValueSet);
+		
+    	return;
+    }
+    
+    
+    
+    /**
+	 * Traverse HashMap ¡®location¡¯ to calculate support and confidence for each pipair
+	 * and determine if a callee function is a bug in a caller function.
+	 */
     public static void printBug(int support,double confidence){
     	
     	Integer supportKey = 0;
@@ -91,19 +144,21 @@ public class pipair_java{
 		
     	for(Set<String> singleKey:location.keySet()){
     		if(singleKey.size()==1){
+				// support of single function
     			supportKey = location.get(singleKey).size();
-    			// bugsingle
+    			// singleKeyStr is for bug line printout 
 				singleKeyStr = singleKey.toArray()[0].toString();
 				
     			for(Set<String> pipairKey:location.keySet()){
         			if(pipairKey.size()>1 && pipairKey.contains(singleKeyStr)){
+						// support of pipair function
         				supportPair = location.get(pipairKey).size();
+						// support of pipair function
         				confidencePair = (double)supportPair/(double)supportKey;
-        				//System.out.println(singleKey+","+pipairKey+","+supportKey+","+supportPair+","+confidencePair);
-        				
+        				// check pipair to meet threshold support and confidence
         				if(supportKey>=support && supportPair>=support && confidencePair<1 && confidencePair>=confidence){
         					
-        					// bugpair
+        					// pairStr1 is for bug line printout
             				pairStr1 = pipairKey.toArray()[0].toString();
             				pairStr2 = pipairKey.toArray()[1].toString();
             				if(pairStr1.compareTo(pairStr2)<0){
@@ -112,15 +167,20 @@ public class pipair_java{
             					pairStr1 = "("+pairStr2+", "+pairStr1+")";
             				}
             				            				
-            				// buglocation
+            				// location for pipair should take place of single function 
             				Set<String> locationTemp = new HashSet<String>();
             				String locationTempStr =null;
             				locationTemp.addAll(location.get(singleKey));
             				locationTemp.removeAll(location.get(pipairKey));
             				for(String locationTempElem:locationTemp){
             					locationTempStr = locationTempElem;
-            					// printbug
-            					System.out.println("bug: "+singleKeyStr+" in "+locationTempStr+", pair: "+pairStr1+", support: "+supportPair+", confidence: "+String.format("%.2f", confidencePair*100)+"%");
+            					
+            					//If a bug is found, then implement DFS to expand the neighbour functions in order to search for the required pair function.
+            					boolean flag = reachReducedBug(singleKey,pipairKey,callerCallee.get(locationTempStr));
+            					if(flag==false){
+            						// printbug
+            						System.out.println("bug: "+singleKeyStr+" in "+locationTempStr+", pair: "+pairStr1+", support: "+supportPair+", confidence: "+String.format("%.2f", confidencePair*100)+"%");
+            					}
             				}
             			}
         			}
@@ -130,70 +190,46 @@ public class pipair_java{
     	
     }
     
-    // partc:solution1
-    public static void initInterLocation(){
-    	// init callerCalleeExtend no caller
-    	List<String> tranList = new ArrayList<String>();
-    	Set<String> tranSet = new HashSet<String>();
-        for(String caller:callerCallee.keySet()){
-        	tranList = new ArrayList<String>();
-        	tranSet = new HashSet<String>();
-        	tranList = getCalleeExtend(tranList,caller,0);
-        	tranSet.addAll(tranList);
-        	callerCalleeExtend.put(caller, tranSet);
-        }
-        
-    	// init initInterLocation
-        int i,j;
-        location.clear();
-        
-        for(String caller:callerCalleeExtend.keySet()){
-        	Set<String> extendCallees = callerCalleeExtend.get(caller);
-        	Object[] extendCalleesArray = extendCallees.toArray();
-        	
-        	// find combination and add locations
-        	for(i=0;i<extendCalleesArray.length;i++){
-        		for(j=0;j<extendCalleesArray.length;j++){
-        			// add locations
-        			Set<String> tempKey = new HashSet<String>();
-        			Set<String> tempValue = null;
-        			tempKey.add(extendCalleesArray[i].toString());
-        			tempKey.add(extendCalleesArray[j].toString());
-        			if(!location.containsKey(tempKey)){
-        				tempValue = new HashSet<String>();
-        			}else{
-        				tempValue = location.get(tempKey);
+    /**
+	 * implement DFS to expand the neighbour functions in order to search for the required pair function.
+	 */
+    public static boolean reachReducedBug(Set<String> singleKey,Set<String> pipairKey, Set<String> nearBy){
+    	Set<String> pipair = new HashSet<String>();
+    	pipair.addAll(pipairKey);
+    	pipair.removeAll(singleKey);
+    	String findPair = pipair.toArray()[0].toString();
+    	for(String nearElem:nearBy){
+    		if(singleKey.contains(nearElem)){
+    			continue;
+    		}
+    		Stack<String> stack = new Stack<String>();
+        	Set<String> visit = new HashSet<String>();
+        	Map<String,Integer> level= new HashMap<String,Integer>();
+        	String pop =null;
+        	Set<String> popSet =null;
+        	visit.add(nearElem);
+        	stack.push(nearElem);
+        	level.put(nearElem, 0);
+        	while(!stack.isEmpty()){
+        		pop = stack.pop();
+        		popSet = callerCallee.get(pop);
+        		if(popSet==null){
+        			continue;
+        		}
+        		for(String popElem: popSet){
+        			level.put(popElem, level.get(pop)+1);
+        			// expandLevel is expand level, default=1
+        			if(!visit.contains(popElem) && level.get(popElem)<=expandLevel){
+        				if(popElem.equals(findPair)){
+        					return true;
+        				}
+        		    	visit.add(popElem);
+        		    	stack.push(popElem);
         			}
-        			tempValue.add(caller);
-        			location.put(tempKey, tempValue);
-        			
         		}
         	}
-        }
-    	
-    }
-    
-    
-    public static List<String> getCalleeExtend(List<String> result,String caller,Integer levelCount){
-    	
-    	//System.out.println("levelCount:"+levelCount);
-		//System.out.println("result:"+result);
-    	// expandLevel means expand level, default =1
-    	if(levelCount>expandLevel){
-    		return result;
-    	}else{
-    		Set<String> callees = callerCallee.get(caller);
-    		if(callees!=null && !callees.isEmpty()){
-    			result.remove(caller);
-    			result.addAll(callees);
-        		for(String callee:callees){
-        			//System.out.println(levelCount+","+result);
-            		result = getCalleeExtend(result,callee,levelCount+1);
-        		}
-    		}
-        	return result;
     	}
-    	
+    	return false;
     }
     
     
