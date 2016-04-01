@@ -12,14 +12,18 @@ import java.util.regex.Pattern;
 public class pipair_java{
 	
 	/**
-	 * key = SET(A), SET(A,B),....
-	 * value = SET(SCOPE1,SCOPE2),....
+	 * key is the list of ordered pipair callee and single callee, 	example: [A],[A,A],[A,B],[B,A]....
+	 * value is the set of callers for the callee, 					example: SET(SCOPE1,SCOPE2),....
 	 */
 	public static Map<List<String>,Set<String>> location= new HashMap<List<String>,Set<String>>();
+	/**
+	 * the set to help initialize HashMap 'location'
+	 */
 	public static List<String> nearByCallees= new ArrayList<String>();
 	
     public static void main(String[] args) throws Exception{  
     	
+		// accept argument to set threshold support and confidence
     	int support=3;
     	double confidence=0.65;
     	int argsLength = args.length;
@@ -59,19 +63,21 @@ public class pipair_java{
 			}
 		}
 		scanner.close();
-		//System.out.println(location);
+		// Traverse HashMap ¡®location¡¯ and print bug
 		printBug(support,confidence);
     }
     
     
-    
+     /**
+	 * the function to help initialize HashMap 'location'
+	 */
     public static void addValueToMap(String addValue,String addLocation){
     	
     	//----------------------location-------------------------
     	List<String> locationMapKeyList = null;
     	Set<String> locationMapValueSet = null;
     	for(String key:nearByCallees){
-    		// add otherpair positive order
+    		// update pair function and its callers
     		locationMapKeyList = new ArrayList<String>();
     		locationMapKeyList.add(key);
     		locationMapKeyList.add(addValue);
@@ -85,7 +91,7 @@ public class pipair_java{
     		
     	}
     	
-    	// add selfpair
+    	// update single function and its callers
 		locationMapKeyList = new ArrayList<String>();
 		locationMapKeyList.add(addValue);
 		if(!location.containsKey(locationMapKeyList)){
@@ -99,7 +105,11 @@ public class pipair_java{
     	return;
     }
     
-    
+
+     /**
+	 * Traverse HashMap ¡®location¡¯ to calculate support and confidence for each pipair
+	 * and determine if a callee function is a bug in a caller function.
+	 */
     public static void printBug(int support,double confidence){
     	
     	Integer supportKey = 0;
@@ -113,56 +123,30 @@ public class pipair_java{
     	for(List<String> key:location.keySet()){
     		if(key.size()==1){
     			List<String> singleKey = key;
+				// support of single function
     			supportKey = location.get(singleKey).size();
-    			// bugsingle
+    			// singleKeyStr is for bug line printout 
 				singleKeyStr = singleKey.get(0);
 				
     			for(List<String> pipairKey:location.keySet()){
     				// findbugpair single should be pipair
         			if(pipairKey.size()>1 && pipairKey.contains(singleKeyStr)){
+						// support of pipair function
         				supportPair = location.get(pipairKey).size();
+						// support of pipair function
         				confidencePair = (double)supportPair/(double)supportKey;
-        				//System.out.println(singleKey+","+pipairKey+","+supportKey+","+supportPair+","+confidencePair);
+        				// check pipair to meet threshold support and confidence
         				if(supportKey>=support && supportPair>=support && confidencePair<1 && confidencePair>=confidence){
-        					// ignore order bug
-        					List<String> pipairKey2 = new ArrayList<String>();
-        					Set<String>locationTemp2 = new HashSet<String>();
-        					pipairKey2.add(pipairKey.get(1));
-        					pipairKey2.add(pipairKey.get(0));
-        					locationTemp2 = location.get(pipairKey2);
-        					
-        					// bugpair
+        					// pairStr1 is for bug line printout
             				pairStr = "("+pipairKey.get(0)+", "+pipairKey.get(1)+")";
-            				// buglocation
+            				// location for pipair should take place of single function 
             				Set<String> locationTemp = new HashSet<String>();
             				String locationTempStr =null;
             				locationTemp.addAll(location.get(singleKey));
             				locationTemp.removeAll(location.get(pipairKey));
             				for(String locationTempElem:locationTemp){
             					locationTempStr = locationTempElem;
-//            					// show appear more than once bug only
-//        						if(pipairKey2.get(0).equals(pipairKey2.get(1))){
-//        							System.out.println("bug: "+singleKeyStr+" in "+locationTempStr+", pair: "+pairStr+", support: "+supportPair+", confidence: "+String.format("%.2f", confidencePair*100)+"%");
-//        						}            					
-            					// show wrong ordered bug only
-//            					if(locationTemp2!=null && locationTemp2.contains(locationTempStr)){
-//            						if(!pipairKey2.get(0).equals(pipairKey2.get(1))){
-//                						//System.out.println("bug: "+singleKeyStr+" in "+locationTempStr+", pair: "+pairStr+", support: "+supportPair+", confidence: "+String.format("%.2f", confidencePair*100)+"%");
-//            						}
-//            					}            					
-            					//show new ordered bug only
-//        						if(locationTemp2!=null && !locationTemp2.isEmpty() && !pipairKey2.get(0).equals(pipairKey2.get(1))){
-//        							supportPair2 = location.get(pipairKey2).size();
-//                    				confidencePair2 = (double)supportPair2/(double)supportKey;
-//                    				if(supportKey>=support && supportPair2>=support && confidencePair2<1 && confidencePair2>=confidence){
-//                    					Set<String> locationTempComp = new HashSet<String>();
-//    	                				locationTempComp.addAll(location.get(singleKey));
-//    	                				locationTempComp.removeAll(location.get(pipairKey2));
-//    	                				if(locationTempComp.contains(locationTempStr)){
-//    	                					System.out.println("bug: "+singleKeyStr+" in "+locationTempStr+", pair: "+pairStr+", support: "+supportPair+", confidence: "+String.format("%.2f", confidencePair*100)+"%");
-//    	                				}
-//                    				}
-//        						}
+            					// printbug
                 				System.out.println("bug: "+singleKeyStr+" in "+locationTempStr+", pair: "+pairStr+", support: "+supportPair+", confidence: "+String.format("%.2f", confidencePair*100)+"%");
             					
             				}
