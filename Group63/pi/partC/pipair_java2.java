@@ -77,9 +77,9 @@ public class pipair_java{
 			}
 		}
 		scanner.close();
-		// Update HashMap ¡®location¡¯ according to expansion result
+		// Update HashMap 'location' according to expansion result
 		initInterLocation();
-		// Traverse HashMap ¡®location¡¯ and print bug
+		// Traverse HashMap 'location' and print bug
 		printBug(support,confidence);
     }
     
@@ -87,7 +87,7 @@ public class pipair_java{
 
 
 	/**
-	 * Traverse HashMap ¡®location¡¯ to calculate support and confidence for each pipair
+	 * Traverse HashMap 'location' to calculate support and confidence for each pipair
 	 * and determine if a callee function is a bug in a caller function.
 	 */
     public static void printBug(int support,double confidence){
@@ -145,12 +145,12 @@ public class pipair_java{
 
 
 	/**
-	 * Expand the functions according to HashMap ¡®callerCallee¡¯ to Create HashMap ¡®callerCalleeExtend¡¯
-	 * Update HashMap ¡®location¡¯ according to HashMap ¡®callerCalleeExtend¡¯
+	 * Expand the functions according to HashMap 'callerCallee' to Create HashMap 'callerCalleeExtend'
+	 * Update HashMap 'location' according to HashMap 'callerCalleeExtend'
 	 */
     public static void initInterLocation(){
 
-    	// Expand the functions according to HashMap ¡®callerCallee¡¯ to Create HashMap ¡®callerCalleeExtend¡¯
+    	// Expand the functions according to HashMap 'callerCallee' to Create HashMap 'callerCalleeExtend'
     	List<String> tranList = new ArrayList<String>();
     	Set<String> tranSet = new HashSet<String>();
         for(String caller:callerCallee.keySet()){
@@ -161,7 +161,7 @@ public class pipair_java{
         	callerCalleeExtend.put(caller, tranSet);
         }
         
-    	// Update HashMap ¡®location¡¯ according to HashMap ¡®callerCalleeExtend¡¯
+    	// Update HashMap 'location' according to HashMap 'callerCalleeExtend'
         int i,j;
         location.clear();        
         for(String caller:callerCalleeExtend.keySet()){

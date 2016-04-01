@@ -2,19 +2,17 @@ ECE653
 Assignment 3 Part1(D) description
 
 The main idea of this approach is to consider the order for pipair, while discovering bug by the method of part1(A)
-The only difference with Part1(A) is that HashMap ¡®location¡¯ changed from Map<Set,Set> into Map<List,Set>
+The only difference with Part1(A) is that HashMap 'location' changed from Map<Set,Set> into Map<List,Set>
 The Map<List,Set> can help distinguish [A,B] from [B,A], and store pipair with same element such as [A,A]
 
 
 The running mothod is the same with part1(A)
-As there are no pipair to connect callgraph with java program, you can run command like this in test folder on eceLinux:
+run the command as below in test folder on eceLinux
 1 make
 2 cd test3
-1 bash
-2 opt -print-callgraph test3.bc 2>&1 >/dev/null  | java -cp ../ -Xms128m -Xmx128m pipair_java $@ 2>/dev/null
-
+3 ../pipair test3.bc 3 65
 
 
 The bug output include:
-1 the original bug in Part1(A),but have been reduce, because some false positive gereneated by MAY belief in Part1(A)
-2 new bug such as 'single function should appear more than once' or 'functions should be called in proper order'
+1 the reduced bug for Part1(A)
+2 the new bug for Part1(D)

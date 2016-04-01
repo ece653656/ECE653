@@ -79,7 +79,7 @@ public class pipair_java{
 		}
 		scanner.close();
 
-		// Traverse HashMap ¡®location¡¯ and print bug
+		// Traverse HashMap 'location' and print bug
 		printBug(support,confidence);
     }
     
@@ -130,7 +130,7 @@ public class pipair_java{
     
     
     /**
-	 * Traverse HashMap ¡®location¡¯ to calculate support and confidence for each pipair
+	 * Traverse HashMap 'location' to calculate support and confidence for each pipair
 	 * and determine if a callee function is a bug in a caller function.
 	 */
     public static void printBug(int support,double confidence){
